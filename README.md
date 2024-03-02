@@ -28,7 +28,7 @@
 
 ### 上手指南
 
-1. 下载 [obsidian-proxy-github.zip](https://gitee.com/juqkai/obsidian-proxy-github/releases)
+1. 下载 [obsidian-proxy-github.zip](https://github.com/userwljs/obsidian-proxy-github/releases)
 2. 解压 obsidian-proxy-github.zip
 3. 将解压的文件夹放入笔记目录下的插件目录内。如：XXX/.obsidian/plugins
 
