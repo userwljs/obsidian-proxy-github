@@ -251,12 +251,12 @@ module.exports = class ProxyGithub extends Plugin {
         apc.regedit();
         app.regedit();
         this.settings = {
-            server: 'mirr'
+            server: 'ghproxy'
         }
     }
     async loadSettings() {
         this.settings = Object.assign({}, {
-            server: 'mirr'
+            server: 'ghproxy'
         }, await this.loadData());
     }
     async saveSettings() {
