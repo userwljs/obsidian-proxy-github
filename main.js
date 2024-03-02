@@ -7,11 +7,6 @@ const {
 let server = 'ghproxy'
 
 let proMap = {
-    github521: {
-        down: "https://521github.com/",
-        raw: "https://521github.com/extdomains/github.com/",
-        home: "https://521github.com/"
-    },
     kgithub: {
         down: "https://kkgithub.com/",
         raw: "https://raw.kkgithub.com/",
@@ -223,7 +218,6 @@ class ProxyGithubSettingTab extends PluginSettingTab {
             // .setValue(this.plugin.settings.server) // <-- Add me!
             .addDropdown(dropDown => {
                 dropDown.addOption('ghproxy', '请选择');
-                dropDown.addOption('github521', 'github521');
                 dropDown.addOption('kgithub', 'kgithub');
                 dropDown.addOption('ghproxy', 'ghproxy');
                 dropDown.addOption('moeyy', 'moeyy');
