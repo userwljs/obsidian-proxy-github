@@ -222,12 +222,12 @@ class ProxyGithubSettingTab extends PluginSettingTab {
             .setDesc(`通过选择不同的服务器来切换代理，可以解决某些情况下，某个服务器无法访问的情况。当前代理服务器：${this.plugin.settings.server}`)
             // .setValue(this.plugin.settings.server) // <-- Add me!
             .addDropdown(dropDown => {
-                dropDown.addOption('mirr', '请选择');
-                dropDown.addOption('fastgit', 'fastgit');
-                dropDown.addOption('mtr', 'mtr');
+                dropDown.addOption('ghproxy', '请选择');
+                dropDown.addOption('github521', 'github521');
+                dropDown.addOption('kgithub', 'kgithub');
                 dropDown.addOption('ghproxy', 'ghproxy');
-                dropDown.addOption('gitclone', 'gitclone');
-                dropDown.addOption('mirr', 'mirr');
+                dropDown.addOption('moeyy', 'moeyy');
+                dropDown.addOption('ghproxy_net', 'ghproxy_net');
                 dropDown.onChange(async (value) => {
                     this.plugin.settings.server = value
                     // this.plugin.settings.server = value;
