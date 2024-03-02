@@ -35,7 +35,8 @@
 
 ### 作者
 
-juqkai@163.com
+原作者 juqkai@163.com
+修改 https://github.com/userwljs
 
 ### 版权说明
 

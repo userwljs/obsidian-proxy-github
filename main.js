@@ -1,57 +1,57 @@
-const {Plugin, PluginSettingTab, Setting } = require("obsidian");
+const {
+    Plugin,
+    PluginSettingTab,
+    Setting
+} = require("obsidian");
 
-let server = 'fastgit'
+let server = 'ghproxy'
 
 let proMap = {
-	fastgit:{
-		down:"https://download.fastgit.org/"
-		,raw:"https://raw.fastgit.org/"
-		,home:"https://hub.fastgit.org/"
-	}
-	,mtr:{
-		down:"https://download.fastgit.org/"
-		,raw:"https://raw-gh.gcdn.mirr.one/"
-		,home:"https://api.mtr.pub/"
-	}
-	,ghproxy:{
-		down:"https://mirror.ghproxy.com/https://github.com/"
-		,raw:"https://mirror.ghproxy.com/https://github.com/"
-		,home:"https://mirror.ghproxy.com/https://github.com/"
-	}
-	,gitclone:{
-		down:"https://download.fastgit.org/"
-		,raw:"https://raw.fastgit.org/"
-		,home:"https://gitclone.com/github.com/"
-	}
-	,mirr:{
-		down:"https://gh.gcdn.mirr.one/"
-		,raw:"https://raw-gh.gcdn.mirr.one/"
-		,home:"https://gh.gcdn.mirr.one/"
-	}
+    github521: {
+        down: "https://521github.com/",
+        raw: "https://521github.com/extdomains/github.com/",
+        home: "https://521github.com/"
+    },
+    kgithub: {
+        down: "https://kkgithub.com/",
+        raw: "https://raw.kkgithub.com/",
+        home: "https://kkgithub.com/"
+    },
+    ghproxy: {
+        down: "https://mirror.ghproxy.com/https://github.com/",
+        raw: "https://mirror.ghproxy.com/https://raw.githubusercontent.com/",
+        home: "https://mirror.ghproxy.com/https://github.com/"
+    },
+    moeyy: {
+        down: "https://github.moeyy.xyz/https://github.com/",
+        raw: "https://github.moeyy.xyz/https://raw.githubusercontent.com/",
+        home: "https://github.moeyy.xyz/https://github.com/"
+    },
+    ghproxy_net: {
+        down: "https://ghproxy.net/https://github.com/",
+        raw: "https://ghproxy.net/https://raw.githubusercontent.com/",
+        home: "https://ghproxy.net/https://github.com/"
+    }
 }
 
-let include = [
-    {
-        match: (url) => url.indexOf("/releases/download/") >= 0
-        , to: (url) => url.replace("https://github.com/", proMap[server].down)
-    }
-    , {
-        match: (url) => url.startsWith("https://raw.githubusercontent.com/") >= 0
-        , to: (url) => url.replace("https://raw.githubusercontent.com/", proMap[server].raw)
-    }
-    , {
-        match: (url) => url.startsWith("https://github.com/") >= 0
-        , to: (url) => url.replace("https://github.com/", proMap[server].home)
-    }
-]
+let include = [{
+    match: (url) => url.indexOf("/releases/download/") >= 0,
+    to: (url) => url.replace("https://github.com/", proMap[server].down)
+}, {
+    match: (url) => url.startsWith("https://raw.githubusercontent.com/") >= 0,
+    to: (url) => url.replace("https://raw.githubusercontent.com/", proMap[server].raw)
+}, {
+    match: (url) => url.startsWith("https://github.com/") >= 0,
+    to: (url) => url.replace("https://github.com/", proMap[server].home)
+}]
 
 // 匹配URL
 function matchUrl(e) {
-	console.log("开始访问：" + JSON.stringify(e))
+    console.log("开始访问：" + JSON.stringify(e))
     for (var key in include) {
         let item = include[key]
-		console.log(key)
-		console.log(item)
+        console.log(key)
+        console.log(item)
         if (e && e.url && item.match(e.url)) {
             e.url = item.to(e.url)
             console.log("要访问的地址：" + e.url)
@@ -68,9 +68,9 @@ function matchUrl(e) {
 
 // 代理访问
 function proxy(e) {
-    return new Promise((function (t, n) {
+    return new Promise((function(t, n) {
         e.success = t;
-        e.error = function (e, t) {
+        e.error = function(e, t) {
             return n(t)
         }
         debugger
@@ -93,7 +93,9 @@ function proxy(e) {
 async function forMobile(e) {
     try {
         const http = require('@capacitor-community/http')
-        const options = {url: e.url};
+        const options = {
+            url: e.url
+        };
         new window.Notice("发送请求：" + e.url, 10000)
         new window.Notice(JSON.stringify(http.get) + "123", 10000)
         // http.get(options);
@@ -116,7 +118,7 @@ async function forMobile(e) {
 function forPC(e) {
     try {
         const https = require('https')
-        https.get(e.url, function (res) {
+        https.get(e.url, function(res) {
             new window.Notice("https.get成功", 10000)
             res.setEncoding('utf8');
             let rawData = '';
@@ -133,7 +135,7 @@ function forPC(e) {
                 }
             });
 
-        }).on('error', function (e) {
+        }).on('error', function(e) {
             new window.Notice("https.get失败", 10000)
             e.error(e)
         })
@@ -147,7 +149,7 @@ function apProxy() {
     var ap;
     this.regedit = function() {
         ap = window.ajaxPromise;
-        window.ajaxPromise = function (e) {
+        window.ajaxPromise = function(e) {
             if (!matchUrl(e)) {
                 return ap(e);
             }
@@ -161,12 +163,12 @@ function apProxy() {
 }
 
 //window.Capacitor.registerPlugin("App").request
- function apCapacitor() {
+function apCapacitor() {
     var ap;
     this.regedit = function() {
         ap = window.Capacitor.registerPlugin("App").request;
         console.log(ap)
-        window.Capacitor.registerPlugin("App").request = function (e){
+        window.Capacitor.registerPlugin("App").request = function(e) {
             matchUrl(e);
             new window.Notice("正在通过 ProxyGithub 来代理访问社区插件！")
             ap(e);
@@ -185,13 +187,13 @@ function apElectron() {
     var ap;
     this.regedit = function() {
         ap = window.require("electron").ipcRenderer.send;
-		debugger
+        debugger
         console.log(ap)
-        window.require("electron").ipcRenderer.send = function (a,b,e,...rest){
-			debugger
+        window.require("electron").ipcRenderer.send = function(a, b, e, ...rest) {
+            debugger
             matchUrl(e);
             new window.Notice("正在通过 ProxyGithub 来代理访问社区插件！")
-            ap(a,b,e, ...rest);
+            ap(a, b, e, ...rest);
             // if (matchUrl(e)) {
             //     return ap(e);
             // }
@@ -226,8 +228,8 @@ class ProxyGithubSettingTab extends PluginSettingTab {
                 dropDown.addOption('ghproxy', 'ghproxy');
                 dropDown.addOption('gitclone', 'gitclone');
                 dropDown.addOption('mirr', 'mirr');
-                dropDown.onChange(async (value) =>	{
-                    this.plugin.settings.server=value
+                dropDown.onChange(async (value) => {
+                    this.plugin.settings.server = value
                     // this.plugin.settings.server = value;
                     await this.plugin.saveSettings();
                 });
@@ -248,16 +250,20 @@ module.exports = class ProxyGithub extends Plugin {
         ape.regedit();
         apc.regedit();
         app.regedit();
-        this.settings = {server:'mirr'}
+        this.settings = {
+            server: 'mirr'
+        }
     }
     async loadSettings() {
-		this.settings = Object.assign({}, {server:'mirr'}, await this.loadData());
-	}
+        this.settings = Object.assign({}, {
+            server: 'mirr'
+        }, await this.loadData());
+    }
     async saveSettings() {
         await this.saveData(this.settings);
-		server = this.settings.server;
-		debugger
-	}
+        server = this.settings.server;
+        debugger
+    }
 
     onunload() {
         ape.unRegedit()
@@ -265,4 +271,3 @@ module.exports = class ProxyGithub extends Plugin {
         app.unRegedit()
     }
 }
-
